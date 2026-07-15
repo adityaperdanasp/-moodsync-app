@@ -428,54 +428,6 @@
     font-size: 40px;
   }
 
-  .couple-scene {
-    position: relative;
-    width: 220px;
-    height: 150px;
-    margin: 0 auto 18px;
-  }
-  .couple-scene .blob {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 190px;
-    height: 150px;
-    background: linear-gradient(135deg, #e0e7ff, #fce7f3);
-    border-radius: 58% 42% 45% 55% / 55% 48% 52% 45%;
-  }
-  .couple-scene .avatar-circle {
-    position: absolute;
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 8px 18px rgba(129,140,248,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 42px;
-    border: 3px solid #fff;
-  }
-  .couple-scene .avatar-circle.left {
-    left: 18px;
-    top: 30px;
-    background: linear-gradient(135deg, #fbcfe8, #fde2ea);
-    z-index: 1;
-  }
-  .couple-scene .avatar-circle.right {
-    right: 18px;
-    top: 46px;
-    background: linear-gradient(135deg, #c7d2fe, #ddd6fe);
-    z-index: 2;
-  }
-  .couple-scene .float-heart {
-    position: absolute;
-    font-size: 22px;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.08));
-  }
-  .couple-scene .float-heart.h1 { top: 6px; left: 92px; font-size: 26px; }
-  .couple-scene .float-heart.h2 { bottom: 10px; right: 30px; font-size: 18px; }
-  .couple-scene .float-heart.h3 { top: 18px; right: 6px; font-size: 16px; }
   .role-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -501,16 +453,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     background: #f5f4fc;
     margin-bottom: 4px;
+    overflow: hidden;
+  }
+  .role-btn .r-emoji img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .role-btn .r-label { font-weight: 800; color: var(--text); }
   .role-btn .r-tagline { font-weight: 400; font-size: 11px; color: var(--muted); line-height: 1.3; }
   .role-btn.selected { border-color: var(--primary); background: #eef1fd; }
-  .role-btn.selected .r-emoji { background: #fff; }
+  .role-btn.selected .r-emoji { background: #fff; box-shadow: 0 4px 12px rgba(129,140,248,0.35); }
+
+  .couple-photo {
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto 18px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(129,140,248,0.25);
+  }
+  .couple-photo img { width: 100%; display: block; }
 
   .onboard-choice {
     display: flex;
@@ -597,6 +565,12 @@
     justify-content: center;
     font-size: 22px;
     flex-shrink: 0;
+    overflow: hidden;
+  }
+  .greeting-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .greeting-text { flex: 1; min-width: 0; }
   .greeting-title { font-weight: 800; font-size: 15px; color: var(--text); }
@@ -622,12 +596,12 @@
       <div class="sub">Kamu di sini sebagai siapa?</div>
       <div class="role-grid">
         <div class="role-btn" data-role="istri">
-          <span class="r-emoji">👩</span>
+          <span class="r-emoji"><img src="assets/avatar-istri.png" alt="Istri"></span>
           <span class="r-label">Istri</span>
           <span class="r-tagline">Aku ingin berbagi perasaan</span>
         </div>
         <div class="role-btn" data-role="suami">
-          <span class="r-emoji">🧑</span>
+          <span class="r-emoji"><img src="assets/avatar-suami.png" alt="Suami"></span>
           <span class="r-label">Suami</span>
           <span class="r-tagline">Aku ingin membuat istri bahagia</span>
         </div>
@@ -637,13 +611,8 @@
 
     <!-- Step 2: buat / gabung pasangan -->
     <div id="stepPair" style="display:none;">
-      <div class="couple-scene">
-        <div class="blob"></div>
-        <div class="avatar-circle left">👩</div>
-        <div class="avatar-circle right">🧑</div>
-        <div class="float-heart h1">💗</div>
-        <div class="float-heart h2">✨</div>
-        <div class="float-heart h3">💫</div>
+      <div class="couple-photo">
+        <img src="assets/couple-illustration.png" alt="Pasangan bahagia">
       </div>
       <h2>Hubungkan dengan Pasangan</h2>
       <div class="sub">Pilih salah satu di bawah ini</div>
@@ -1461,11 +1430,11 @@
 
   function renderGreeting(role) {
     if (role === 'istri') {
-      greetingAvatar.textContent = '👩';
+      greetingAvatar.innerHTML = '<img src="assets/avatar-istri.png" alt="Istri">';
       greetingTitle.textContent = 'Hai, Istri Cantik! 💕';
       greetingSub.textContent = 'Yuk, ceritakan perasaanmu hari ini';
     } else {
-      greetingAvatar.textContent = '🧑';
+      greetingAvatar.innerHTML = '<img src="assets/avatar-suami.png" alt="Suami">';
       greetingTitle.textContent = 'Hai, Suami Hebat! 👋';
       greetingSub.textContent = 'Yuk, bahagiakan istrimu hari ini';
     }
