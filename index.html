@@ -504,6 +504,13 @@
       <button class="secondary" id="saveGopayBtn">Simpan Nomor</button>
       <div id="gopaySavedMsg" style="font-size:12px; color:#2f9e44; text-align:center; margin-top:8px;"></div>
     </div>
+
+    <div class="card">
+      <h2>📍 Bagikan Lokasi</h2>
+      <div class="sub">Klik kapan pun kamu mau, suami langsung lihat lokasimu sekarang. Kamu yang kontrol kapan dibagikan.</div>
+      <button class="secondary" id="shareLocationBtn">Bagikan Lokasi Sekarang</button>
+      <div id="locationShareMsg" style="font-size:12px; text-align:center; margin-top:8px;"></div>
+    </div>
   </div>
 
   <!-- HUSBAND VIEW -->
@@ -519,6 +526,12 @@
       <h2>Yang perlu kamu lakukan</h2>
       <div class="sub">Centang setelah kamu lakukan ya 💪</div>
       <ul class="suggestion-list" id="suggestionList"></ul>
+    </div>
+
+    <div class="card" id="locationCard" style="display:none;">
+      <h2>📍 Lokasi Istrimu</h2>
+      <div class="sub" id="locationTime"></div>
+      <a class="whatsapp-btn" id="openMapsLink" href="#" target="_blank" rel="noopener" style="background: var(--primary); border:none;">Buka di Google Maps</a>
     </div>
 
     <div class="card">
@@ -817,6 +830,11 @@
   const gopayNumberDisplay = document.getElementById('gopayNumberDisplay');
   const copyGopayBtn = document.getElementById('copyGopayBtn');
   const openGopayAppBtn = document.getElementById('openGopayAppBtn');
+  const shareLocationBtn = document.getElementById('shareLocationBtn');
+  const locationShareMsg = document.getElementById('locationShareMsg');
+  const locationCard = document.getElementById('locationCard');
+  const locationTime = document.getElementById('locationTime');
+  const openMapsLink = document.getElementById('openMapsLink');
   const foodOverlay = document.getElementById('foodOverlay');
   const openGofoodBtn = document.getElementById('openGofoodBtn');
   const openGrabfoodBtn = document.getElementById('openGrabfoodBtn');
@@ -1075,6 +1093,39 @@
     setTimeout(() => { gopaySavedMsg.textContent = ''; }, 2000);
   });
 
+  shareLocationBtn.addEventListener('click', () => {
+    if (!('geolocation' in navigator)) {
+      locationShareMsg.style.color = '#c92a2a';
+      locationShareMsg.textContent = 'Browser kamu tidak mendukung fitur lokasi';
+      return;
+    }
+    shareLocationBtn.disabled = true;
+    shareLocationBtn.textContent = 'Mencari lokasi...';
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude, ts: Date.now() };
+        await saveData({ ...data, settings: { ...(data.settings || {}), wifeLocation: loc } });
+
+        const husbandToken = data.settings && data.settings.husbandToken;
+        sendPushNotification(husbandToken, '📍 Istrimu membagikan lokasi', 'Buka MoodSync buat lihat lokasinya di peta');
+
+        locationShareMsg.style.color = '#2f9e44';
+        locationShareMsg.textContent = 'Lokasi berhasil dibagikan ✓';
+        shareLocationBtn.disabled = false;
+        shareLocationBtn.textContent = 'Bagikan Lokasi Sekarang';
+        setTimeout(() => { locationShareMsg.textContent = ''; }, 3000);
+      },
+      (err) => {
+        console.error('Geolocation error', err);
+        locationShareMsg.style.color = '#c92a2a';
+        locationShareMsg.textContent = 'Gagal ambil lokasi. Pastikan izin lokasi diaktifkan.';
+        shareLocationBtn.disabled = false;
+        shareLocationBtn.textContent = 'Bagikan Lokasi Sekarang';
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+
   function renderReactionFeedback(type) {
     const messages = {
       uang: 'Notifikasi terkirim ke istrimu. Sekarang buka aplikasi mobile banking/e-wallet kamu untuk transfer beneran ya.',
@@ -1097,11 +1148,23 @@
     });
   });
 
+  function renderLocationCard() {
+    const loc = data.settings && data.settings.wifeLocation;
+    if (!loc) {
+      locationCard.style.display = 'none';
+      return;
+    }
+    locationCard.style.display = 'block';
+    locationTime.textContent = `Terakhir dibagikan: ${timeAgo(loc.ts)}`;
+    openMapsLink.href = `https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
+  }
+
   function renderAll() {
     renderMoodGrid();
     renderHistory();
     renderHusbandView();
     renderNotifs();
+    renderLocationCard();
     if (document.activeElement !== gopayInput) {
       gopayInput.value = (data.settings && data.settings.wifeGopayNumber) || '';
     }
