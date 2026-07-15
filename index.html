@@ -134,10 +134,62 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    position: relative;
+    z-index: 1;
   }
   .status-banner .emoji-big { font-size: 44px; }
-  .status-banner .label { font-size: 18px; font-weight: 700; }
-  .status-banner .time { font-size: 12px; color: var(--muted); }
+  .status-banner .label { font-size: 18px; font-weight: 800; }
+  .status-banner .time { font-size: 12px; opacity: 0.85; }
+
+  .mood-hero-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary), #a78bfa);
+    color: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(129,140,248,0.35);
+  }
+  .mood-hero-card .status-banner .label,
+  .mood-hero-card .status-banner .time { color: #fff; }
+  .mood-hero-card #noteDisplay .note-box {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+  .mood-hero-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    margin-bottom: 10px;
+  }
+  .mood-hero-deco {
+    position: absolute;
+    top: -10px;
+    right: -6px;
+    font-size: 90px;
+    opacity: 0.25;
+    transform: rotate(15deg);
+  }
+  .mood-hero-card .empty { color: rgba(255,255,255,0.85); }
+
+  .streak-row { display: flex; align-items: center; gap: 12px; }
+  .streak-emoji {
+    font-size: 30px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fff7e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .streak-title { font-weight: 800; font-size: 14px; color: var(--text); }
 
   .note-box {
     background: #f5f4fc;
@@ -276,6 +328,38 @@
   .modal-sheet h2 { margin: 0 0 8px; color: var(--primary-dark); }
   .modal-sheet .sub { margin-bottom: 20px; }
   .modal-sheet .whatsapp-btn + .whatsapp-btn { margin-top: 12px; }
+
+  .florist-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f5f4fc;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 16px;
+    margin-bottom: 10px;
+  }
+  .florist-card:first-of-type { margin-top: 0; }
+  .florist-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .florist-info { flex: 1; min-width: 0; }
+  .florist-name { font-weight: 700; font-size: 14px; color: var(--text); }
+  .florist-tag { font-size: 11px; color: #16a34a; margin-top: 2px; }
+  .trust-badge {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 16px;
+  }
   .contact-card {
     display: flex;
     align-items: center;
@@ -332,6 +416,17 @@
   }
   .onboard-card h2 { margin: 0 0 6px; color: var(--primary-dark); text-align: center; }
   .onboard-card .sub { text-align: center; margin-bottom: 20px; }
+  .onboard-hero {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0e7ff, #fbcfe8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
   .role-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -342,14 +437,31 @@
     border: 2px solid var(--border);
     background: #fff;
     border-radius: 14px;
-    padding: 18px 8px;
+    padding: 18px 10px;
     text-align: center;
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
   }
-  .role-btn .r-emoji { font-size: 34px; display: block; margin-bottom: 6px; }
+  .role-btn .r-emoji {
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #f5f4fc;
+    margin-bottom: 4px;
+  }
+  .role-btn .r-label { font-weight: 800; color: var(--text); }
+  .role-btn .r-tagline { font-weight: 400; font-size: 11px; color: var(--muted); line-height: 1.3; }
   .role-btn.selected { border-color: var(--primary); background: #eef1fd; }
+  .role-btn.selected .r-emoji { background: #fff; }
 
   .onboard-choice {
     display: flex;
@@ -415,6 +527,37 @@
     margin: 8px auto 0;
     text-align: center;
   }
+
+  .greeting-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .greeting-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0e7ff, #fbcfe8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .greeting-text { flex: 1; min-width: 0; }
+  .greeting-title { font-weight: 800; font-size: 15px; color: var(--text); }
+  .greeting-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .greeting-switch {
+    font-size: 11px;
+    padding: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -425,21 +568,31 @@
 
     <!-- Step 1: pilih peran -->
     <div id="stepRole">
-      <h2>💞 MoodSync</h2>
+      <div class="onboard-hero">💞</div>
+      <h2>MoodSync</h2>
       <div class="sub">Kamu di sini sebagai siapa?</div>
       <div class="role-grid">
-        <div class="role-btn" data-role="istri"><span class="r-emoji">👩</span>Istri</div>
-        <div class="role-btn" data-role="suami"><span class="r-emoji">🧑</span>Suami</div>
+        <div class="role-btn" data-role="istri">
+          <span class="r-emoji">👩</span>
+          <span class="r-label">Istri</span>
+          <span class="r-tagline">Aku ingin berbagi perasaan</span>
+        </div>
+        <div class="role-btn" data-role="suami">
+          <span class="r-emoji">🧑</span>
+          <span class="r-label">Suami</span>
+          <span class="r-tagline">Aku ingin membuat istri bahagia</span>
+        </div>
       </div>
       <button class="primary" id="roleNextBtn">Lanjut</button>
     </div>
 
     <!-- Step 2: buat / gabung pasangan -->
     <div id="stepPair" style="display:none;">
+      <div class="onboard-hero">🧑‍🤝‍👩</div>
       <h2>Hubungkan dengan Pasangan</h2>
       <div class="sub">Pilih salah satu di bawah ini</div>
       <div class="onboard-choice">
-        <button class="primary" id="createPairBtn">Buat Kode Pasangan Baru</button>
+        <button class="primary" id="createPairBtn">Buat Kode Pasangan Baru ✨</button>
         <button class="secondary" id="joinPairBtn">Sudah Punya Kode? Gabung</button>
       </div>
       <button class="link" id="backToRoleBtn">← Kembali</button>
@@ -472,16 +625,20 @@
 <header>
   <h1>💞 MoodSync</h1>
   <p>Istri isi mood — suami langsung tahu apa yang perlu dilakukan</p>
-  <div class="role-tag" id="roleTag"></div>
 </header>
 
 <div class="sync-banner connecting" id="syncBanner">Menghubungkan...</div>
 
-<div class="switch-role">
-  <button class="link" id="switchRoleBtn">Bukan kamu? Ganti peran / keluar dari pasangan ini</button>
-</div>
-
 <main>
+  <div class="greeting-card">
+    <div class="greeting-avatar" id="greetingAvatar">👋</div>
+    <div class="greeting-text">
+      <div class="greeting-title" id="greetingTitle">Hai!</div>
+      <div class="greeting-sub" id="greetingSub"></div>
+    </div>
+    <button class="link greeting-switch" id="switchRoleBtn">Ganti peran</button>
+  </div>
+
   <!-- WIFE VIEW -->
   <div class="view active" id="wifeView">
     <div id="notifArea"></div>
@@ -517,11 +674,21 @@
 
   <!-- HUSBAND VIEW -->
   <div class="view" id="husbandView">
-    <div class="card" id="statusCard">
-      <h2>Mood istrimu sekarang</h2>
-      <div class="sub">Update terakhir</div>
+    <div class="mood-hero-card" id="statusCard">
+      <div class="mood-hero-deco">💗</div>
+      <div class="mood-hero-label">Mood Istrimu</div>
       <div class="status-banner" id="statusBanner"></div>
       <div id="noteDisplay"></div>
+    </div>
+
+    <div class="card" id="streakCard" style="display:none;">
+      <div class="streak-row">
+        <div class="streak-emoji">🔥</div>
+        <div>
+          <div class="streak-title" id="streakTitle">Streak Kamu</div>
+          <div class="sub" style="margin:0;" id="streakSub"></div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -568,8 +735,25 @@
     <h2>💐 Pesan Bunga</h2>
     <div class="sub">Pilih toko bunga, langsung chat WhatsApp buat pesenin istri</div>
 
-    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287881522000?text=Halo%20Manis'e%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat Manis'e Florist</a>
-    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287887996802?text=Halo%20Cille%20Tale%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat Cille Tale Florist</a>
+    <div class="florist-card">
+      <div class="florist-avatar" style="background:#fbcfe8; color:#9d174d;">M</div>
+      <div class="florist-info">
+        <div class="florist-name">Manis'e Florist</div>
+        <div class="florist-tag">✓ Chat langsung ke toko</div>
+      </div>
+    </div>
+    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287881522000?text=Halo%20Manis'e%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat via WhatsApp</a>
+
+    <div class="florist-card">
+      <div class="florist-avatar" style="background:#bbf7d0; color:#166534;">C</div>
+      <div class="florist-info">
+        <div class="florist-name">Cille Tale Florist</div>
+        <div class="florist-tag">✓ Chat langsung ke toko</div>
+      </div>
+    </div>
+    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287887996802?text=Halo%20Cille%20Tale%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat via WhatsApp</a>
+
+    <div class="trust-badge">🛡️ Kamu akan diarahkan langsung ke WhatsApp resmi toko</div>
   </div>
 </div>
 
@@ -832,6 +1016,9 @@
   const openGopayAppBtn = document.getElementById('openGopayAppBtn');
   const shareLocationBtn = document.getElementById('shareLocationBtn');
   const locationShareMsg = document.getElementById('locationShareMsg');
+  const streakCard = document.getElementById('streakCard');
+  const streakTitle = document.getElementById('streakTitle');
+  const streakSub = document.getElementById('streakSub');
   const locationCard = document.getElementById('locationCard');
   const locationTime = document.getElementById('locationTime');
   const openMapsLink = document.getElementById('openMapsLink');
@@ -868,6 +1055,42 @@
     const hrs = Math.floor(diff / 60);
     if (hrs < 24) return `${hrs} jam lalu`;
     return `${Math.floor(hrs / 24)} hari lalu`;
+  }
+
+  function dayKey(ts) {
+    const d = new Date(ts);
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }
+
+  function computeStreak(history) {
+    if (!history || history.length === 0) return 0;
+    const days = [...new Set(history.map(h => dayKey(h.ts)))];
+    const dayMs = 24 * 60 * 60 * 1000;
+    let streak = 0;
+    let cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+
+    // Boleh mulai dari hari ini atau kemarin (kalau belum isi hari ini, streak tetap dihitung dari kemarin)
+    if (!days.includes(dayKey(cursor.getTime()))) {
+      cursor = new Date(cursor.getTime() - dayMs);
+    }
+
+    while (days.includes(dayKey(cursor.getTime()))) {
+      streak++;
+      cursor = new Date(cursor.getTime() - dayMs);
+    }
+    return streak;
+  }
+
+  function renderStreak() {
+    const streak = computeStreak(data.history);
+    if (streak < 2) {
+      streakCard.style.display = 'none';
+      return;
+    }
+    streakCard.style.display = 'block';
+    streakTitle.textContent = `Streak Kamu 🔥`;
+    streakSub.textContent = `${streak} hari berturut-turut istrimu isi mood`;
   }
 
   function renderNotifs() {
@@ -1165,6 +1388,7 @@
     renderHusbandView();
     renderNotifs();
     renderLocationCard();
+    renderStreak();
     if (document.activeElement !== gopayInput) {
       gopayInput.value = (data.settings && data.settings.wifeGopayNumber) || '';
     }
@@ -1175,7 +1399,21 @@
   // ============================================================
   const onboardOverlay = document.getElementById('onboardOverlay');
   const appRoot = document.getElementById('appRoot');
-  const roleTag = document.getElementById('roleTag');
+  const greetingAvatar = document.getElementById('greetingAvatar');
+  const greetingTitle = document.getElementById('greetingTitle');
+  const greetingSub = document.getElementById('greetingSub');
+
+  function renderGreeting(role) {
+    if (role === 'istri') {
+      greetingAvatar.textContent = '👩';
+      greetingTitle.textContent = 'Hai, Istri Cantik! 💕';
+      greetingSub.textContent = 'Yuk, ceritakan perasaanmu hari ini';
+    } else {
+      greetingAvatar.textContent = '🧑';
+      greetingTitle.textContent = 'Hai, Suami Hebat! 👋';
+      greetingSub.textContent = 'Yuk, bahagiakan istrimu hari ini';
+    }
+  }
 
   const stepRole = document.getElementById('stepRole');
   const stepPair = document.getElementById('stepPair');
@@ -1275,7 +1513,7 @@
     docRef = doc(db, COUPLES_COLLECTION, coupleCode);
     onboardOverlay.style.display = 'none';
     appRoot.style.display = 'block';
-    roleTag.textContent = role === 'istri' ? '👩 Kamu masuk sebagai Istri' : '🧑 Kamu masuk sebagai Suami';
+    renderGreeting(role);
     showViewForRole(role);
     renderAll();
     startSync();
@@ -1292,7 +1530,7 @@
     // Firebase belum siap tapi session ada — tetap coba tampilkan UI
     appRoot.style.display = 'block';
     onboardOverlay.style.display = 'none';
-    roleTag.textContent = session.role === 'istri' ? '👩 Kamu masuk sebagai Istri' : '🧑 Kamu masuk sebagai Suami';
+    renderGreeting(session.role);
     showViewForRole(session.role);
     renderAll();
   }
