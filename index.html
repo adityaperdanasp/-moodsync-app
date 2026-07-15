@@ -381,17 +381,20 @@
     color: var(--primary);
     margin: 18px 0 8px;
   }
-  .field-pair { display: flex; gap: 10px; }
-  .field-pair .field-row { flex: 1; margin-bottom: 10px; }
-  .field-pair .field-row label {
+  .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-row { margin-bottom: 10px; min-width: 0; }
+  .field-row.full { grid-column: 1 / -1; }
+  .field-row label {
     display: block;
     font-size: 12px;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 4px;
   }
-  .field-pair .field-row input {
+  .field-row input {
+    display: block;
     width: 100%;
+    height: 42px;
     padding: 9px 12px;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -849,16 +852,15 @@
       <div class="sub">Isi biar suami dapat reminder otomatis H-7 & hari-H</div>
 
       <div class="field-pair">
-        <div class="field-row"><label>Ulang tahun kamu</label><input type="date" id="dateWifeBirthday"></div>
+        <div class="field-row full"><label>Ulang tahun kamu</label><input type="date" id="dateWifeBirthday"></div>
+      </div>
+      <div class="field-pair">
         <div class="field-row"><label>Anniversary pernikahan</label><input type="date" id="dateWeddingAnniversary"></div>
-      </div>
-      <div class="field-pair">
         <div class="field-row"><label>Anniversary jadian</label><input type="date" id="dateDatingAnniversary"></div>
-        <div class="field-row"><label>Ultah papa mertua</label><input type="date" id="dateFatherInLaw"></div>
       </div>
       <div class="field-pair">
+        <div class="field-row"><label>Ultah papa mertua</label><input type="date" id="dateFatherInLaw"></div>
         <div class="field-row"><label>Ultah mama mertua</label><input type="date" id="dateMotherInLaw"></div>
-        <div class="field-row"></div>
       </div>
       <div class="field-pair">
         <div class="field-row"><label>Nama kakak ipar 1</label><input type="text" id="nameKakak1" placeholder="mis. Mbak Rani"></div>
