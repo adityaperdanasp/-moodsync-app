@@ -4,22 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MoodSync — Bahagiakan Pasangan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   :root {
-    --bg: #fff5f7;
+    --bg-start: #a5b4fc;
+    --bg-end: #fbcfe8;
     --card: #ffffff;
-    --primary: #d6336c;
-    --primary-dark: #a61e4d;
-    --accent: #7048e8;
-    --text: #3a2438;
-    --muted: #8a7686;
-    --border: #f3d9e2;
+    --primary: #818cf8;
+    --primary-dark: #6366f1;
+    --accent: #fca5a5;
+    --accent-2: #67e8f9;
+    --text: #4c4869;
+    --muted: #9891b8;
+    --border: #ece9fb;
   }
   body {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--bg);
+    font-family: "Plus Jakarta Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+    background-attachment: fixed;
     color: var(--text);
     min-height: 100vh;
   }
@@ -97,7 +103,7 @@
   .mood-btn .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
   .mood-btn.selected {
     border-color: var(--primary);
-    background: #fff0f4;
+    background: #eef1fd;
   }
 
   textarea {
@@ -134,7 +140,7 @@
   .status-banner .time { font-size: 12px; color: var(--muted); }
 
   .note-box {
-    background: #faf3f6;
+    background: #f5f4fc;
     border-radius: 10px;
     padding: 10px 12px;
     font-size: 13px;
@@ -209,14 +215,14 @@
     align-items: center;
     gap: 4px;
   }
-  .reaction-btn:hover { border-color: var(--primary); background: #fff0f4; }
+  .reaction-btn:hover { border-color: var(--primary); background: #eef1fd; }
   .reaction-btn .r-emoji { font-size: 26px; }
   .reaction-btn .r-label { font-size: 12px; font-weight: 700; color: var(--text); }
   .reaction-btn .r-sub { font-size: 10px; color: var(--muted); }
 
   #reactionFeedback .feedback-msg {
     margin-top: 12px;
-    background: #fff0f4;
+    background: #eef1fd;
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 10px 12px;
@@ -225,7 +231,7 @@
   }
 
   .notif-banner {
-    background: linear-gradient(135deg, #ffe3ec, #f3e8ff);
+    background: linear-gradient(135deg, #fbcfe8, #c7d2fe);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 14px 16px;
@@ -242,7 +248,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(58, 36, 56, 0.5);
+    background: rgba(76, 72, 105, 0.45);
     align-items: center;
     justify-content: center;
     padding: 16px;
@@ -272,7 +278,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #faf3f6;
+    background: #f5f4fc;
     border-radius: 12px;
     padding: 12px;
     margin: 16px 0;
@@ -341,7 +347,7 @@
     font-weight: 700;
   }
   .role-btn .r-emoji { font-size: 34px; display: block; margin-bottom: 6px; }
-  .role-btn.selected { border-color: var(--primary); background: #fff0f4; }
+  .role-btn.selected { border-color: var(--primary); background: #eef1fd; }
 
   .onboard-choice {
     display: flex;
@@ -375,7 +381,7 @@
     font-weight: 800;
     letter-spacing: 4px;
     color: var(--primary-dark);
-    background: #fff0f4;
+    background: #eef1fd;
     border-radius: 12px;
     padding: 16px;
     margin: 16px 0;
