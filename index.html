@@ -268,7 +268,19 @@
     gap: 4px;
   }
   .reaction-btn:hover { border-color: var(--primary); background: #eef1fd; }
-  .reaction-btn .r-emoji { font-size: 26px; }
+  .reaction-btn .r-emoji {
+    font-size: 26px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .reaction-btn .r-emoji img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
   .reaction-btn .r-label { font-size: 12px; font-weight: 700; color: var(--text); }
   .reaction-btn .r-sub { font-size: 10px; color: var(--muted); }
 
@@ -733,17 +745,17 @@
       <div class="sub">Bahagiakan istrimu sekarang juga. Happy wife, happy life.</div>
       <div class="reaction-grid">
         <button class="reaction-btn" data-action="uang">
-          <span class="r-emoji">💸</span>
+          <span class="r-emoji"><img src="assets/icon-uang.png" alt="Kirim Uang"></span>
           <span class="r-label">Kirim Uang</span>
           <span class="r-sub">Buka aplikasi transfer bankmu</span>
         </button>
         <button class="reaction-btn" data-action="bunga">
-          <span class="r-emoji">💐</span>
+          <span class="r-emoji"><img src="assets/icon-bunga.png" alt="Kirim Bunga"></span>
           <span class="r-label">Kirim Bunga</span>
           <span class="r-sub">Hubungi Kang Bunga</span>
         </button>
         <button class="reaction-btn" data-action="makanan">
-          <span class="r-emoji">🍱</span>
+          <span class="r-emoji"><img src="assets/icon-makanan.png" alt="Pesenin Makanan"></span>
           <span class="r-label">Pesenin Makanan</span>
           <span class="r-sub">Buka aplikasi ojek online</span>
         </button>
