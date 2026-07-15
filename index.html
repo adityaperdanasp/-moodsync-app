@@ -490,6 +490,14 @@
       <div class="sub">Catatan mood yang pernah dikirim</div>
       <div id="historyList"></div>
     </div>
+
+    <div class="card">
+      <h2>Nomor GoPay Kamu</h2>
+      <div class="sub">Isi sekali, biar suami gampang transfer pas mau kirim uang ke kamu</div>
+      <input type="text" class="code-input" id="gopayInput" style="text-transform:none; letter-spacing:normal; font-size:16px;" placeholder="0812xxxxxxxx">
+      <button class="secondary" id="saveGopayBtn">Simpan Nomor</button>
+      <div id="gopaySavedMsg" style="font-size:12px; color:#2f9e44; text-align:center; margin-top:8px;"></div>
+    </div>
   </div>
 
   <!-- HUSBAND VIEW -->
@@ -549,6 +557,24 @@
     <div class="hint-small">Nomor ini contoh placeholder. Ganti dengan kontak toko bunga langgananmu ya.</div>
   </div>
 </div>
+
+<!-- GoPay modal -->
+<div class="overlay" id="gopayOverlay">
+  <div class="modal-sheet">
+    <button class="close" id="gopayClose">&times;</button>
+    <h2>💸 Kirim Uang ke Istri</h2>
+    <div class="sub">Buka aplikasi GoPay/Gojek kamu, transfer ke nomor ini</div>
+    <div class="contact-card" id="gopayContactCard">
+      <div class="contact-avatar">💚</div>
+      <div>
+        <div class="contact-name" id="gopayNumberDisplay">Nomor belum diisi istri</div>
+        <div class="contact-phone">GoPay</div>
+      </div>
+    </div>
+    <button class="whatsapp-btn" id="copyGopayBtn" style="background: var(--primary); border:none;">Copy Nomor</button>
+    <div class="hint-small">Buka app GoPay/Gojek secara manual, pilih Transfer/Kirim, lalu paste/cari nomor ini. MoodSync tidak bisa transfer otomatis.</div>
+  </div>
+</div>
 </div> <!-- /appRoot -->
 
 <script type="module">
@@ -573,7 +599,7 @@
   const SESSION_KEY = 'moodsync-session'; // { role, coupleCode } — khusus device ini, tidak disinkron
   const COUPLES_COLLECTION = 'couples';
 
-  const defaultData = { current: null, history: [], reactions: [] };
+  const defaultData = { current: null, history: [], reactions: [], settings: { wifeGopayNumber: '' } };
   let data = { ...defaultData };
   let db = null;
   let docRef = null;
@@ -719,6 +745,12 @@
   const reactionFeedback = document.getElementById('reactionFeedback');
   const flowerOverlay = document.getElementById('flowerOverlay');
   const waLink = document.getElementById('waLink');
+  const gopayOverlay = document.getElementById('gopayOverlay');
+  const gopayInput = document.getElementById('gopayInput');
+  const saveGopayBtn = document.getElementById('saveGopayBtn');
+  const gopaySavedMsg = document.getElementById('gopaySavedMsg');
+  const gopayNumberDisplay = document.getElementById('gopayNumberDisplay');
+  const copyGopayBtn = document.getElementById('copyGopayBtn');
 
   function renderMoodGrid() {
     moodGrid.innerHTML = moods.map(m => `
@@ -872,9 +904,50 @@
         return;
       }
 
+      if (type === 'uang') {
+        const num = (data.settings && data.settings.wifeGopayNumber) || '';
+        gopayNumberDisplay.textContent = num ? num : 'Nomor belum diisi istri';
+        gopayOverlay.classList.add('open');
+        return;
+      }
+
       await logReaction(type);
       renderReactionFeedback(type);
     });
+  });
+
+  copyGopayBtn.addEventListener('click', async () => {
+    const num = (data.settings && data.settings.wifeGopayNumber) || '';
+    if (!num) {
+      alert('Istri belum isi nomor GoPay-nya');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(num);
+      copyGopayBtn.textContent = 'Tersalin ✓';
+    } catch {
+      copyGopayBtn.textContent = num;
+    }
+    await logReaction('uang');
+    setTimeout(() => { copyGopayBtn.textContent = 'Copy Nomor'; }, 1500);
+  });
+
+  document.getElementById('gopayClose').addEventListener('click', () => {
+    gopayOverlay.classList.remove('open');
+  });
+  gopayOverlay.addEventListener('click', (e) => {
+    if (e.target === gopayOverlay) gopayOverlay.classList.remove('open');
+  });
+
+  saveGopayBtn.addEventListener('click', async () => {
+    const num = gopayInput.value.trim();
+    if (!num) {
+      alert('Isi nomor GoPay dulu ya');
+      return;
+    }
+    await saveData({ ...data, settings: { ...(data.settings || {}), wifeGopayNumber: num } });
+    gopaySavedMsg.textContent = 'Nomor tersimpan ✓';
+    setTimeout(() => { gopaySavedMsg.textContent = ''; }, 2000);
   });
 
   function renderReactionFeedback(type) {
@@ -902,6 +975,9 @@
     renderHistory();
     renderHusbandView();
     renderNotifs();
+    if (document.activeElement !== gopayInput) {
+      gopayInput.value = (data.settings && data.settings.wifeGopayNumber) || '';
+    }
   }
 
   // ============================================================
