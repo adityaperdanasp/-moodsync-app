@@ -576,6 +576,21 @@
     <div class="hint-small">Tombol "Buka Aplikasi GoPay" cuma membuka app-nya kalau sudah terinstall (nomor & nominal tidak terisi otomatis, itu batasan dari GoPay). Kalau tidak kebuka, buka manual lalu paste nomor yang sudah di-copy.</div>
   </div>
 </div>
+
+<!-- Food delivery modal -->
+<div class="overlay" id="foodOverlay">
+  <div class="modal-sheet">
+    <button class="close" id="foodClose">&times;</button>
+    <h2>🍱 Pesenin Makanan</h2>
+    <div class="sub">Pilih mau buka app yang mana buat pesenin istri makanan favoritnya</div>
+    <div class="onboard-choice">
+      <button class="secondary" id="openGofoodBtn">🟢 Buka GoFood</button>
+      <button class="secondary" id="openGrabfoodBtn">🟩 Buka GrabFood</button>
+      <button class="secondary" id="openShopeefoodBtn">🟠 Buka ShopeeFood</button>
+    </div>
+    <div class="hint-small">Tombol ini cuma mencoba membuka app-nya kalau sudah terinstall di HP kamu (menu/pesanan tidak terisi otomatis, itu batasan dari masing-masing app). Kalau tidak kebuka, buka manual dari homescreen HP-mu.</div>
+  </div>
+</div>
 </div> <!-- /appRoot -->
 
 <script type="module">
@@ -805,6 +820,10 @@
   const gopayNumberDisplay = document.getElementById('gopayNumberDisplay');
   const copyGopayBtn = document.getElementById('copyGopayBtn');
   const openGopayAppBtn = document.getElementById('openGopayAppBtn');
+  const foodOverlay = document.getElementById('foodOverlay');
+  const openGofoodBtn = document.getElementById('openGofoodBtn');
+  const openGrabfoodBtn = document.getElementById('openGrabfoodBtn');
+  const openShopeefoodBtn = document.getElementById('openShopeefoodBtn');
 
   function renderMoodGrid() {
     moodGrid.innerHTML = moods.map(m => `
@@ -978,9 +997,46 @@
         return;
       }
 
+      if (type === 'makanan') {
+        foodOverlay.classList.add('open');
+        return;
+      }
+
       await logReaction(type);
       renderReactionFeedback(type);
     });
+  });
+
+  function openAppBestEffort(scheme) {
+    window.location.href = scheme;
+  }
+
+  openGofoodBtn.addEventListener('click', async () => {
+    openAppBestEffort('gojek://gofood');
+    foodOverlay.classList.remove('open');
+    await logReaction('makanan');
+    renderReactionFeedback('makanan');
+  });
+
+  openGrabfoodBtn.addEventListener('click', async () => {
+    openAppBestEffort('grab://open?screenType=FOOD');
+    foodOverlay.classList.remove('open');
+    await logReaction('makanan');
+    renderReactionFeedback('makanan');
+  });
+
+  openShopeefoodBtn.addEventListener('click', async () => {
+    openAppBestEffort('shopeeid://');
+    foodOverlay.classList.remove('open');
+    await logReaction('makanan');
+    renderReactionFeedback('makanan');
+  });
+
+  document.getElementById('foodClose').addEventListener('click', () => {
+    foodOverlay.classList.remove('open');
+  });
+  foodOverlay.addEventListener('click', (e) => {
+    if (e.target === foodOverlay) foodOverlay.classList.remove('open');
   });
 
   copyGopayBtn.addEventListener('click', async () => {
