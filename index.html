@@ -544,17 +544,26 @@
 <div class="overlay" id="flowerOverlay">
   <div class="modal-sheet">
     <button class="close" id="flowerClose">&times;</button>
-    <h2>💐 Kang Bunga</h2>
-    <div class="sub">Kontak pengrajin bunga (contoh) untuk kamu hubungi langsung</div>
+    <h2>💐 Pesan Bunga</h2>
+    <div class="sub">Pilih toko bunga, langsung chat WhatsApp buat pesenin istri</div>
+
     <div class="contact-card">
       <div class="contact-avatar">🌷</div>
       <div>
-        <div class="contact-name">Kang Bunga — Toko Kembang Asri</div>
-        <div class="contact-phone">0812-3456-7890</div>
+        <div class="contact-name">Manis'e Florist</div>
+        <div class="contact-phone">+62 878-8152-2000</div>
       </div>
     </div>
-    <a class="whatsapp-btn" id="waLink" href="#" target="_blank" rel="noopener">Chat via WhatsApp</a>
-    <div class="hint-small">Nomor ini contoh placeholder. Ganti dengan kontak toko bunga langgananmu ya.</div>
+    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287881522000?text=Halo%20Manis'e%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya" target="_blank" rel="noopener">Chat Manis'e Florist</a>
+
+    <div class="contact-card" style="margin-top:14px;">
+      <div class="contact-avatar">🌷</div>
+      <div>
+        <div class="contact-name">Cille Tale Florist</div>
+        <div class="contact-phone">+62 878-8799-6802</div>
+      </div>
+    </div>
+    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287887996802?text=Halo%20Cille%20Tale%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya" target="_blank" rel="noopener">Chat Cille Tale Florist</a>
   </div>
 </div>
 
@@ -793,11 +802,9 @@
 
   const reactionTypes = {
     uang: { emoji: '💸', text: 'Suami baru saja mengirim uang buat kamu!' },
-    bunga: { emoji: '💐', text: 'Suami memesan bunga buat kamu dari Kang Bunga!' },
+    bunga: { emoji: '💐', text: 'Suami memesan bunga buat kamu!' },
     makanan: { emoji: '🍱', text: 'Suami baru saja pesenin makanan buat kamu!' }
   };
-
-  const flowerContact = { name: 'Kang Bunga — Toko Kembang Asri', phone: '081234567890' };
 
   let selectedMoodId = null;
 
@@ -812,7 +819,6 @@
   const suggestionList = document.getElementById('suggestionList');
   const reactionFeedback = document.getElementById('reactionFeedback');
   const flowerOverlay = document.getElementById('flowerOverlay');
-  const waLink = document.getElementById('waLink');
   const gopayOverlay = document.getElementById('gopayOverlay');
   const gopayInput = document.getElementById('gopayInput');
   const saveGopayBtn = document.getElementById('saveGopayBtn');
@@ -986,7 +992,6 @@
 
       if (type === 'bunga') {
         flowerOverlay.classList.add('open');
-        waLink.href = `https://wa.me/${flowerContact.phone}?text=${encodeURIComponent('Halo Kang, saya mau pesan bunga untuk dikirim ke istri saya')}`;
         return;
       }
 
@@ -1093,10 +1098,12 @@
   flowerOverlay.addEventListener('click', (e) => {
     if (e.target === flowerOverlay) flowerOverlay.classList.remove('open');
   });
-  waLink.addEventListener('click', async () => {
-    await logReaction('bunga');
-    flowerOverlay.classList.remove('open');
-    renderReactionFeedback('bunga');
+  document.querySelectorAll('.flower-wa-link').forEach(link => {
+    link.addEventListener('click', async () => {
+      await logReaction('bunga');
+      flowerOverlay.classList.remove('open');
+      renderReactionFeedback('bunga');
+    });
   });
 
   function renderAll() {
