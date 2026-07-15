@@ -372,6 +372,117 @@
     color: var(--muted);
     margin-top: 16px;
   }
+
+  .profil-section {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary);
+    margin: 18px 0 8px;
+  }
+  .field-pair { display: flex; gap: 10px; }
+  .field-pair .field-row { flex: 1; margin-bottom: 10px; }
+  .field-pair .field-row label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .field-pair .field-row input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+  }
+  .reminder-note {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    background: #eef1fd;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--primary-dark);
+    margin-top: 12px;
+  }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .info-tile { background: #f5f4fc; border-radius: 12px; padding: 10px 12px; }
+  .info-tile.wide { grid-column: span 2; }
+  .info-tile .k { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .info-tile .v { font-size: 14px; font-weight: 800; color: var(--text); margin-top: 2px; }
+  .info-tile .v .cd {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--primary);
+    border-radius: 999px;
+    padding: 2px 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .info-tile .v .cd.soon { background: #f59e0b; }
+
+  .debt-total {
+    background: linear-gradient(135deg, #fca5a5, #f59e0b);
+    color: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .debt-total .lbl { font-size: 11px; opacity: 0.9; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .debt-total .amt { font-size: 22px; font-weight: 800; margin-top: 2px; }
+  .debt-list { list-style: none; margin: 0 0 6px; padding: 0; }
+  .debt-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .debt-item:last-child { border-bottom: none; }
+  .debt-no {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f5f4fc;
+    color: var(--primary-dark);
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .debt-body { flex: 1; min-width: 0; }
+  .debt-desc { font-size: 13px; font-weight: 700; color: var(--text); }
+  .debt-date { font-size: 11px; color: var(--muted); }
+  .debt-amt { font-size: 13px; font-weight: 800; color: #dc2626; white-space: nowrap; }
+  .debt-amt.paid { color: #16a34a; text-decoration: line-through; }
+  .debt-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff;
+  }
+  .debt-check.done { background: #16a34a; border-color: #16a34a; }
   .contact-card {
     display: flex;
     align-items: center;
@@ -714,6 +825,66 @@
       <button class="secondary" id="shareLocationBtn">Bagikan Lokasi Sekarang</button>
       <div id="locationShareMsg" style="font-size:12px; text-align:center; margin-top:8px;"></div>
     </div>
+
+    <div class="card">
+      <h2>💳 Hutang Suami</h2>
+      <div class="sub">Catat kalau suami lagi punya hutang ke kamu</div>
+      <div class="debt-total" id="wifeDebtTotal" style="display:none;">
+        <div><div class="lbl">Total Belum Lunas</div><div class="amt" id="wifeDebtTotalAmt">Rp 0</div></div>
+        <div style="font-size:28px;">💰</div>
+      </div>
+      <ul class="debt-list" id="wifeDebtList"></ul>
+
+      <div class="profil-section" style="margin-top:0;">➕ Tambah Catatan Hutang</div>
+      <div class="field-pair">
+        <div class="field-row"><label>Tanggal</label><input type="date" id="debtDateInput"></div>
+        <div class="field-row"><label>Nominal (Rp)</label><input type="number" id="debtAmountInput" placeholder="mis. 50000"></div>
+      </div>
+      <div class="field-row"><label>Deskripsi</label><input type="text" id="debtDescInput" placeholder="mis. Pinjam buat bayar listrik"></div>
+      <button class="primary" id="addDebtBtn">Tambah Hutang</button>
+    </div>
+
+    <div class="card">
+      <h2>📅 Tanggal Penting</h2>
+      <div class="sub">Isi biar suami dapat reminder otomatis H-7 & hari-H</div>
+
+      <div class="field-pair">
+        <div class="field-row"><label>Ulang tahun kamu</label><input type="date" id="dateWifeBirthday"></div>
+        <div class="field-row"><label>Anniversary pernikahan</label><input type="date" id="dateWeddingAnniversary"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Anniversary jadian</label><input type="date" id="dateDatingAnniversary"></div>
+        <div class="field-row"><label>Ultah papa mertua</label><input type="date" id="dateFatherInLaw"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Ultah mama mertua</label><input type="date" id="dateMotherInLaw"></div>
+        <div class="field-row"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Nama kakak ipar 1</label><input type="text" id="nameKakak1" placeholder="mis. Mbak Rani"></div>
+        <div class="field-row"><label>Ultahnya</label><input type="date" id="dateKakak1"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Nama kakak ipar 2</label><input type="text" id="nameKakak2" placeholder="mis. Mas Adi"></div>
+        <div class="field-row"><label>Ultahnya</label><input type="date" id="dateKakak2"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Nama adik ipar 1</label><input type="text" id="nameAdik1" placeholder="mis. Dek Bima"></div>
+        <div class="field-row"><label>Ultahnya</label><input type="date" id="dateAdik1"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Nama adik ipar 2</label><input type="text" id="nameAdik2"></div>
+        <div class="field-row"><label>Ultahnya</label><input type="date" id="dateAdik2"></div>
+      </div>
+      <div class="field-pair">
+        <div class="field-row"><label>Nama adik ipar 3</label><input type="text" id="nameAdik3"></div>
+        <div class="field-row"><label>Ultahnya</label><input type="date" id="dateAdik3"></div>
+      </div>
+
+      <button class="primary" id="saveDatesBtn">Simpan Tanggal</button>
+      <div id="datesSavedMsg" style="font-size:12px; color:#2f9e44; text-align:center; margin-top:8px;"></div>
+      <div class="reminder-note">🔔 <span>Tanggal yang kamu isi otomatis jadi reminder — suami dapat notifikasi H-7 dan di hari-H nya.</span></div>
+    </div>
   </div>
 
   <!-- HUSBAND VIEW -->
@@ -768,6 +939,24 @@
         </button>
       </div>
       <div id="reactionFeedback"></div>
+    </div>
+
+    <div class="card">
+      <h2>💳 Hutang Kamu ke Istri</h2>
+      <div class="sub">Centang kalau sudah kamu bayar</div>
+      <div class="debt-total" id="husbandDebtTotal" style="display:none;">
+        <div><div class="lbl">Total Belum Lunas</div><div class="amt" id="husbandDebtTotalAmt">Rp 0</div></div>
+        <div style="font-size:28px;">💰</div>
+      </div>
+      <ul class="debt-list" id="husbandDebtList"></ul>
+      <div id="husbandDebtEmpty" class="empty" style="display:none;">Belum ada catatan hutang</div>
+      <div style="font-size:11px; color:var(--muted); text-align:center; margin-top:4px;">Tap lingkaran di kiri buat tandai lunas</div>
+    </div>
+
+    <div class="card" id="datesCard" style="display:none;">
+      <h2>📅 Tanggal Penting</h2>
+      <div class="sub">Jangan sampai kelewat, ada reminder otomatis kok</div>
+      <div class="info-grid" id="datesInfoGrid"></div>
     </div>
   </div>
 </main>
@@ -861,7 +1050,14 @@
   const SESSION_KEY = 'moodsync-session'; // { role, coupleCode } — khusus device ini, tidak disinkron
   const COUPLES_COLLECTION = 'couples';
 
-  const defaultData = { current: null, history: [], reactions: [], settings: { wifeGopayNumber: '' } };
+  const defaultData = {
+    current: null,
+    history: [],
+    reactions: [],
+    settings: { wifeGopayNumber: '' },
+    debts: [],
+    importantDates: {}
+  };
   let data = { ...defaultData };
   let db = null;
   let docRef = null;
@@ -1063,6 +1259,32 @@
   const streakCard = document.getElementById('streakCard');
   const streakTitle = document.getElementById('streakTitle');
   const streakSub = document.getElementById('streakSub');
+
+  // Debt elements
+  const wifeDebtTotal = document.getElementById('wifeDebtTotal');
+  const wifeDebtTotalAmt = document.getElementById('wifeDebtTotalAmt');
+  const wifeDebtList = document.getElementById('wifeDebtList');
+  const debtDateInput = document.getElementById('debtDateInput');
+  const debtAmountInput = document.getElementById('debtAmountInput');
+  const debtDescInput = document.getElementById('debtDescInput');
+  const addDebtBtn = document.getElementById('addDebtBtn');
+  const husbandDebtTotal = document.getElementById('husbandDebtTotal');
+  const husbandDebtTotalAmt = document.getElementById('husbandDebtTotalAmt');
+  const husbandDebtList = document.getElementById('husbandDebtList');
+  const husbandDebtEmpty = document.getElementById('husbandDebtEmpty');
+
+  // Important dates elements
+  const dateFieldIds = {
+    wifeBirthday: 'dateWifeBirthday',
+    weddingAnniversary: 'dateWeddingAnniversary',
+    datingAnniversary: 'dateDatingAnniversary',
+    fatherInLaw: 'dateFatherInLaw',
+    motherInLaw: 'dateMotherInLaw'
+  };
+  const saveDatesBtn = document.getElementById('saveDatesBtn');
+  const datesSavedMsg = document.getElementById('datesSavedMsg');
+  const datesCard = document.getElementById('datesCard');
+  const datesInfoGrid = document.getElementById('datesInfoGrid');
   const locationCard = document.getElementById('locationCard');
   const locationTime = document.getElementById('locationTime');
   const openMapsLink = document.getElementById('openMapsLink');
@@ -1136,6 +1358,166 @@
     streakTitle.textContent = `Streak Kamu 🔥`;
     streakSub.textContent = `${streak} hari berturut-turut istrimu isi mood`;
   }
+
+  function formatRupiah(num) {
+    const n = Number(num) || 0;
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  function formatTanggal(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function daysUntilNext(dateStr) {
+    if (!dateStr) return null;
+    const parts = dateStr.split('-');
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let next = new Date(today.getFullYear(), month, day);
+    if (next < today) next = new Date(today.getFullYear() + 1, month, day);
+    return Math.round((next - today) / (24 * 60 * 60 * 1000));
+  }
+
+  function countdownBadge(dateStr) {
+    const days = daysUntilNext(dateStr);
+    if (days === null) return '';
+    if (days === 0) return `<span class="cd soon">Hari ini! 🎉</span>`;
+    if (days <= 7) return `<span class="cd soon">${days} hari lagi</span>`;
+    if (days <= 30) return `<span class="cd">${days} hari lagi</span>`;
+    return '';
+  }
+
+  function renderDebtList(listEl, totalEl, totalAmtEl, emptyEl, interactive) {
+    const debts = data.debts || [];
+    const unpaidTotal = debts.filter(d => !d.paid).reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+
+    if (debts.length === 0) {
+      listEl.innerHTML = '';
+      totalEl.style.display = 'none';
+      if (emptyEl) emptyEl.style.display = 'block';
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+    totalEl.style.display = 'flex';
+    totalAmtEl.textContent = formatRupiah(unpaidTotal);
+
+    listEl.innerHTML = debts.map((d, i) => `
+      <li class="debt-item">
+        <div class="debt-check ${d.paid ? 'done' : ''}" data-idx="${i}">${d.paid ? '✓' : ''}</div>
+        <div class="debt-no">${i + 1}</div>
+        <div class="debt-body">
+          <div class="debt-desc">${escapeHtml(d.desc || '')}</div>
+          <div class="debt-date">${formatTanggal(d.date)}</div>
+        </div>
+        <div class="debt-amt ${d.paid ? 'paid' : ''}">${formatRupiah(d.amount)}</div>
+      </li>
+    `).join('');
+
+    if (interactive) {
+      listEl.querySelectorAll('.debt-check').forEach(el => {
+        el.addEventListener('click', async () => {
+          const idx = parseInt(el.dataset.idx, 10);
+          const newDebts = data.debts.map((d, i) => i === idx ? { ...d, paid: !d.paid } : d);
+          await saveData({ ...data, debts: newDebts });
+        });
+      });
+    }
+  }
+
+  function renderDebts() {
+    renderDebtList(wifeDebtList, wifeDebtTotal, wifeDebtTotalAmt, null, true);
+    renderDebtList(husbandDebtList, husbandDebtTotal, husbandDebtTotalAmt, husbandDebtEmpty, true);
+  }
+
+  function renderImportantDatesWife() {
+    const dates = data.importantDates || {};
+    Object.keys(dateFieldIds).forEach(key => {
+      const el = document.getElementById(dateFieldIds[key]);
+      if (el && document.activeElement !== el) el.value = dates[key] || '';
+    });
+    ['Kakak1', 'Kakak2', 'Adik1', 'Adik2', 'Adik3'].forEach(suffix => {
+      const nameEl = document.getElementById('name' + suffix);
+      const dateEl = document.getElementById('date' + suffix);
+      if (nameEl && document.activeElement !== nameEl) nameEl.value = dates['name' + suffix] || '';
+      if (dateEl && document.activeElement !== dateEl) dateEl.value = dates['date' + suffix] || '';
+    });
+  }
+
+  function renderImportantDatesHusband() {
+    const dates = data.importantDates || {};
+    const tiles = [];
+
+    if (dates.wifeBirthday) {
+      tiles.push(`<div class="info-tile wide"><div class="k">🎂 Ulang tahun istri</div><div class="v">${formatTanggal(dates.wifeBirthday)} ${countdownBadge(dates.wifeBirthday)}</div></div>`);
+    }
+    if (dates.weddingAnniversary) {
+      tiles.push(`<div class="info-tile"><div class="k">💍 Anniv. pernikahan</div><div class="v">${formatTanggal(dates.weddingAnniversary)} ${countdownBadge(dates.weddingAnniversary)}</div></div>`);
+    }
+    if (dates.datingAnniversary) {
+      tiles.push(`<div class="info-tile"><div class="k">💕 Anniv. jadian</div><div class="v">${formatTanggal(dates.datingAnniversary)} ${countdownBadge(dates.datingAnniversary)}</div></div>`);
+    }
+    if (dates.fatherInLaw) {
+      tiles.push(`<div class="info-tile"><div class="k">👨 Ultah papa mertua</div><div class="v">${formatTanggal(dates.fatherInLaw)} ${countdownBadge(dates.fatherInLaw)}</div></div>`);
+    }
+    if (dates.motherInLaw) {
+      tiles.push(`<div class="info-tile"><div class="k">👩 Ultah mama mertua</div><div class="v">${formatTanggal(dates.motherInLaw)} ${countdownBadge(dates.motherInLaw)}</div></div>`);
+    }
+    [['Kakak1', 'kakak ipar'], ['Kakak2', 'kakak ipar'], ['Adik1', 'adik ipar'], ['Adik2', 'adik ipar'], ['Adik3', 'adik ipar']].forEach(([suffix, label]) => {
+      const name = dates['name' + suffix];
+      const date = dates['date' + suffix];
+      if (name && date) {
+        tiles.push(`<div class="info-tile wide"><div class="k">👤 Ultah ${escapeHtml(name)} (${label})</div><div class="v">${formatTanggal(date)} ${countdownBadge(date)}</div></div>`);
+      }
+    });
+
+    if (tiles.length === 0) {
+      datesCard.style.display = 'none';
+      return;
+    }
+    datesCard.style.display = 'block';
+    datesInfoGrid.innerHTML = tiles.join('');
+  }
+
+  addDebtBtn.addEventListener('click', async () => {
+    const date = debtDateInput.value;
+    const amount = debtAmountInput.value;
+    const desc = debtDescInput.value.trim();
+    if (!date || !amount || !desc) {
+      alert('Isi tanggal, nominal, dan deskripsi dulu ya');
+      return;
+    }
+    const newDebt = { date, amount: Number(amount), desc, paid: false, ts: Date.now() };
+    const newDebts = [...(data.debts || []), newDebt];
+    await saveData({ ...data, debts: newDebts });
+
+    const husbandToken = data.settings && data.settings.husbandToken;
+    sendPushNotification(husbandToken, '💳 Hutang baru dicatat', `${desc} — ${formatRupiah(amount)}`);
+
+    debtDateInput.value = '';
+    debtAmountInput.value = '';
+    debtDescInput.value = '';
+  });
+
+  saveDatesBtn.addEventListener('click', async () => {
+    const newDates = { ...(data.importantDates || {}) };
+    Object.keys(dateFieldIds).forEach(key => {
+      const el = document.getElementById(dateFieldIds[key]);
+      if (el) newDates[key] = el.value;
+    });
+    ['Kakak1', 'Kakak2', 'Adik1', 'Adik2', 'Adik3'].forEach(suffix => {
+      const nameEl = document.getElementById('name' + suffix);
+      const dateEl = document.getElementById('date' + suffix);
+      if (nameEl) newDates['name' + suffix] = nameEl.value.trim();
+      if (dateEl) newDates['date' + suffix] = dateEl.value;
+    });
+    await saveData({ ...data, importantDates: newDates });
+    datesSavedMsg.textContent = 'Tanggal tersimpan ✓';
+    setTimeout(() => { datesSavedMsg.textContent = ''; }, 2000);
+  });
 
   function renderNotifs() {
     const recent = (data.reactions || []).slice().reverse().slice(0, 3);
@@ -1433,6 +1815,9 @@
     renderNotifs();
     renderLocationCard();
     renderStreak();
+    renderDebts();
+    renderImportantDatesWife();
+    renderImportantDatesHusband();
     if (document.activeElement !== gopayInput) {
       gopayInput.value = (data.settings && data.settings.wifeGopayNumber) || '';
     }
