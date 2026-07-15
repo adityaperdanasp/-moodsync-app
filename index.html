@@ -427,6 +427,55 @@
     justify-content: center;
     font-size: 40px;
   }
+
+  .couple-scene {
+    position: relative;
+    width: 220px;
+    height: 150px;
+    margin: 0 auto 18px;
+  }
+  .couple-scene .blob {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 190px;
+    height: 150px;
+    background: linear-gradient(135deg, #e0e7ff, #fce7f3);
+    border-radius: 58% 42% 45% 55% / 55% 48% 52% 45%;
+  }
+  .couple-scene .avatar-circle {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 8px 18px rgba(129,140,248,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    border: 3px solid #fff;
+  }
+  .couple-scene .avatar-circle.left {
+    left: 18px;
+    top: 30px;
+    background: linear-gradient(135deg, #fbcfe8, #fde2ea);
+    z-index: 1;
+  }
+  .couple-scene .avatar-circle.right {
+    right: 18px;
+    top: 46px;
+    background: linear-gradient(135deg, #c7d2fe, #ddd6fe);
+    z-index: 2;
+  }
+  .couple-scene .float-heart {
+    position: absolute;
+    font-size: 22px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.08));
+  }
+  .couple-scene .float-heart.h1 { top: 6px; left: 92px; font-size: 26px; }
+  .couple-scene .float-heart.h2 { bottom: 10px; right: 30px; font-size: 18px; }
+  .couple-scene .float-heart.h3 { top: 18px; right: 6px; font-size: 16px; }
   .role-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -588,7 +637,14 @@
 
     <!-- Step 2: buat / gabung pasangan -->
     <div id="stepPair" style="display:none;">
-      <div class="onboard-hero">🧑‍🤝‍👩</div>
+      <div class="couple-scene">
+        <div class="blob"></div>
+        <div class="avatar-circle left">👩</div>
+        <div class="avatar-circle right">🧑</div>
+        <div class="float-heart h1">💗</div>
+        <div class="float-heart h2">✨</div>
+        <div class="float-heart h3">💫</div>
+      </div>
       <h2>Hubungkan dengan Pasangan</h2>
       <div class="sub">Pilih salah satu di bawah ini</div>
       <div class="onboard-choice">
