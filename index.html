@@ -572,7 +572,8 @@
       </div>
     </div>
     <button class="whatsapp-btn" id="copyGopayBtn" style="background: var(--primary); border:none;">Copy Nomor</button>
-    <div class="hint-small">Buka app GoPay/Gojek secara manual, pilih Transfer/Kirim, lalu paste/cari nomor ini. MoodSync tidak bisa transfer otomatis.</div>
+    <button class="secondary" id="openGopayAppBtn" style="margin-top:10px;">Buka Aplikasi GoPay</button>
+    <div class="hint-small">Tombol "Buka Aplikasi GoPay" cuma membuka app-nya kalau sudah terinstall (nomor & nominal tidak terisi otomatis, itu batasan dari GoPay). Kalau tidak kebuka, buka manual lalu paste nomor yang sudah di-copy.</div>
   </div>
 </div>
 </div> <!-- /appRoot -->
@@ -646,7 +647,7 @@
   }
 
   function generateCoupleCode() {
-    const words = ['LOVE', 'HEART', 'CINTA', 'SAYANG', 'RINDU', 'PEACE'];
+    const words = ['LOVE', 'CARE', 'HUGS', 'KISS', 'WARM', 'GLAD', 'CALM', 'DEAR', 'SWEE', 'CUTE'];
     const word = words[Math.floor(Math.random() * words.length)];
     const num = Math.floor(10 + Math.random() * 90);
     return `${word}${num}`;
@@ -751,6 +752,7 @@
   const gopaySavedMsg = document.getElementById('gopaySavedMsg');
   const gopayNumberDisplay = document.getElementById('gopayNumberDisplay');
   const copyGopayBtn = document.getElementById('copyGopayBtn');
+  const openGopayAppBtn = document.getElementById('openGopayAppBtn');
 
   function renderMoodGrid() {
     moodGrid.innerHTML = moods.map(m => `
@@ -930,6 +932,12 @@
     }
     await logReaction('uang');
     setTimeout(() => { copyGopayBtn.textContent = 'Copy Nomor'; }, 1500);
+  });
+
+  openGopayAppBtn.addEventListener('click', () => {
+    // Best-effort: GoPay/Gojek tidak punya deep link resmi buat prefill nomor/nominal,
+    // ini cuma coba buka app-nya kalau terinstall. Kalau gagal, browser diam saja.
+    window.location.href = 'gojek://gopay/home';
   });
 
   document.getElementById('gopayClose').addEventListener('click', () => {
