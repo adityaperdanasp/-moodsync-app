@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Ungu</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2d0b4e, #6a0dad, #9d4edd, #c77dff);
+    background-size: 400% 400%;
+    animation: bgMove 12s ease infinite;
+  }
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .calculator {
+    width: 320px;
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(60, 10, 90, 0.55);
+    box-shadow: 0 20px 50px rgba(90, 0, 140, 0.6), inset 0 0 20px rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .display {
+    background: linear-gradient(135deg, #3c096c, #7b2cbf);
+    border-radius: 16px;
+    padding: 20px 16px;
+    margin-bottom: 16px;
+    text-align: right;
+    color: #fff;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .display .prev {
+    font-size: 14px;
+    color: #d9b3ff;
+    min-height: 18px;
+    word-wrap: break-word;
+  }
+  .display .curr {
+    font-size: 34px;
+    font-weight: bold;
+    min-height: 42px;
+    word-wrap: break-word;
+  }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  button {
+    border: none;
+    border-radius: 14px;
+    padding: 18px 0;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  button:active {
+    transform: scale(0.93);
+  }
+  .num {
+    background: linear-gradient(135deg, #5a189a, #9d4edd);
+  }
+  .op {
+    background: linear-gradient(135deg, #ff6ec4, #c724b1);
+  }
+  .func {
+    background: linear-gradient(135deg, #7209b7, #b5179e);
+  }
+  .equal {
+    background: linear-gradient(135deg, #ff9e00, #ff5400);
+    grid-column: span 2;
+  }
+  .zero {
+    grid-column: span 2;
+  }
+  button:hover {
+    filter: brightness(1.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="display">
+    <div class="prev" id="prev"></div>
+    <div class="curr" id="curr">0</div>
+  </div>
+  <div class="buttons">
+    <button class="func" onclick="clearAll()">AC</button>
+    <button class="func" onclick="deleteLast()">DEL</button>
+    <button class="func" onclick="percent()">%</button>
+    <button class="op" onclick="chooseOp('÷')">÷</button>
+
+    <button class="num" onclick="appendNum('7')">7</button>
+    <button class="num" onclick="appendNum('8')">8</button>
+    <button class="num" onclick="appendNum('9')">9</button>
+    <button class="op" onclick="chooseOp('×')">×</button>
+
+    <button class="num" onclick="appendNum('4')">4</button>
+    <button class="num" onclick="appendNum('5')">5</button>
+    <button class="num" onclick="appendNum('6')">6</button>
+    <button class="op" onclick="chooseOp('-')">−</button>
+
+    <button class="num" onclick="appendNum('1')">1</button>
+    <button class="num" onclick="appendNum('2')">2</button>
+    <button class="num" onclick="appendNum('3')">3</button>
+    <button class="op" onclick="chooseOp('+')">+</button>
+
+    <button class="num zero" onclick="appendNum('0')">0</button>
+    <button class="num" onclick="appendNum('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+  let curr = '0';
+  let prev = '';
+  let operator = null;
+
+  const currEl = document.getElementById('curr');
+  const prevEl = document.getElementById('prev');
+
+  function updateDisplay() {
+    currEl.textContent = curr;
+    prevEl.textContent = prev ? `${prev} ${operator}` : '';
+  }
+
+  function appendNum(num) {
+    if (num === '.' && curr.includes('.')) return;
+    if (curr === '0' && num !== '.') {
+      curr = num;
+    } else {
+      curr += num;
+    }
+    updateDisplay();
+  }
+
+  function chooseOp(op) {
+    if (operator !== null) calculate();
+    prev = curr;
+    operator = op;
+    curr = '0';
+    updateDisplay();
+  }
+
+  function calculate() {
+    if (operator === null || prev === '') return;
+    const a = parseFloat(prev);
+    const b = parseFloat(curr);
+    let result;
+    switch (operator) {
+      case '+': result = a + b; break;
+      case '-': result = a - b; break;
+      case '×': result = a * b; break;
+      case '÷': result = b === 0 ? 'Error' : a / b; break;
+      default: return;
+    }
+    curr = result.toString();
+    prev = '';
+    operator = null;
+    updateDisplay();
+  }
+
+  function clearAll() {
+    curr = '0';
+    prev = '';
+    operator = null;
+    updateDisplay();
+  }
+
+  function deleteLast() {
+    curr = curr.length > 1 ? curr.slice(0, -1) : '0';
+    updateDisplay();
+  }
+
+  function percent() {
+    curr = (parseFloat(curr) / 100).toString();
+    updateDisplay();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key >= '0' && e.key <= '9') appendNum(e.key);
+    if (e.key === '.') appendNum('.');
+    if (e.key === '+') chooseOp('+');
+    if (e.key === '-') chooseOp('-');
+    if (e.key === '*') chooseOp('×');
+    if (e.key === '/') { e.preventDefault(); chooseOp('÷'); }
+    if (e.key === 'Enter' || e.key === '=') calculate();
+    if (e.key === 'Backspace') deleteLast();
+    if (e.key === 'Escape') clearAll();
+  });
+</script>
+
+</body>
+</html>

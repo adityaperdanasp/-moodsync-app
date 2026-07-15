@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dapur Nusantara — Bagikan Resep Masakan Indonesia</title>
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #fdf6ec;
+    --card: #ffffff;
+    --primary: #b3541e;
+    --primary-dark: #8a3e13;
+    --accent: #c62828;
+    --text: #3a2a1d;
+    --muted: #8a7a6a;
+    --border: #eadfce;
+  }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  header h1 { margin: 0 0 6px; font-size: 28px; }
+  header p { margin: 0; opacity: 0.9; font-size: 14px; }
+
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .search {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+  }
+  select {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    background: #fff;
+  }
+  button.primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.primary:hover { background: var(--primary-dark); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .recipe-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .recipe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  }
+  .recipe-card .badge {
+    align-self: flex-start;
+    background: #fdeee0;
+    color: var(--primary-dark);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .recipe-card h3 { margin: 4px 0 0; font-size: 17px; }
+  .recipe-card .meta { font-size: 12px; color: var(--muted); }
+  .recipe-card .desc {
+    font-size: 13px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+  }
+
+  /* Modal */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 15, 5, 0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 50;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px;
+    position: relative;
+  }
+  .modal h2 { margin-top: 0; color: var(--primary-dark); }
+  .modal .close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .modal .meta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .modal section { margin-bottom: 16px; }
+  .modal section h4 {
+    margin: 0 0 8px;
+    color: var(--primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 4px;
+  }
+  .modal ul, .modal ol { margin: 0; padding-left: 20px; }
+  .modal li { margin-bottom: 6px; line-height: 1.5; }
+  .modal .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .modal .danger {
+    background: #fdeaea;
+    color: var(--accent);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  /* Form modal */
+  form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 12px 0 4px;
+    color: var(--text);
+  }
+  form input[type=text], form select, form textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    font-family: inherit;
+  }
+  form textarea { resize: vertical; }
+  form .hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  form .row { display: flex; gap: 12px; }
+  form .row > div { flex: 1; }
+  form .submit-row { margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🍛 Dapur Nusantara</h1>
+  <p>Tempat berbagi resep masakan Indonesia — disimpan langsung di browser Anda</p>
+</header>
+
+<main>
+  <div class="toolbar">
+    <input type="text" class="search" id="searchInput" placeholder="Cari resep atau bahan...">
+    <select id="categoryFilter">
+      <option value="">Semua Kategori</option>
+    </select>
+    <button class="primary" id="addBtn">+ Tambah Resep</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState" style="display:none;">Belum ada resep. Klik "Tambah Resep" untuk mulai berbagi!</div>
+</main>
+
+<!-- View modal -->
+<div class="overlay" id="viewOverlay">
+  <div class="modal" id="viewModal"></div>
+</div>
+
+<!-- Form modal -->
+<div class="overlay" id="formOverlay">
+  <div class="modal">
+    <button class="close" id="formClose">&times;</button>
+    <h2 id="formTitle">Tambah Resep</h2>
+    <form id="recipeForm">
+      <label>Nama Resep</label>
+      <input type="text" id="f_name" required placeholder="mis. Rendang Daging">
+
+      <div class="row">
+        <div>
+          <label>Kategori</label>
+          <input type="text" id="f_category" list="categoryList" placeholder="mis. Masakan Padang">
+          <datalist id="categoryList"></datalist>
+        </div>
+        <div>
+          <label>Asal Daerah</label>
+          <input type="text" id="f_origin" placeholder="mis. Sumatera Barat">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Waktu Masak</label>
+          <input type="text" id="f_time" placeholder="mis. 2 jam">
+        </div>
+        <div>
+          <label>Porsi</label>
+          <input type="text" id="f_servings" placeholder="mis. 4 orang">
+        </div>
+      </div>
+
+      <label>Deskripsi Singkat</label>
+      <textarea id="f_desc" rows="2" placeholder="Ceritakan sedikit tentang resep ini..."></textarea>
+
+      <label>Bahan-bahan (satu per baris)</label>
+      <textarea id="f_ingredients" rows="5" required placeholder="500 gr daging sapi&#10;2 batang serai&#10;3 lembar daun jeruk"></textarea>
+      <div class="hint">Tulis satu bahan per baris</div>
+
+      <label>Langkah Memasak (satu per baris)</label>
+      <textarea id="f_steps" rows="6" required placeholder="Haluskan semua bumbu&#10;Tumis bumbu hingga harum&#10;Masukkan daging, masak hingga empuk"></textarea>
+      <div class="hint">Tulis satu langkah per baris, akan ditampilkan sebagai urutan</div>
+
+      <div class="submit-row">
+        <button type="button" class="danger" id="cancelBtn">Batal</button>
+        <button type="submit" class="primary">Simpan Resep</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'dapur-nusantara-resep';
+
+  const seed = [
+    {
+      id: 'seed-1',
+      name: 'Rendang Daging',
+      category: 'Masakan Padang',
+      origin: 'Sumatera Barat',
+      time: '3 jam',
+      servings: '6 orang',
+      desc: 'Rendang klasik dengan bumbu rempah kaya, dimasak perlahan hingga kering dan meresap.',
+      ingredients: ['1 kg daging sapi, potong besar', '1 liter santan kental', '8 buah cabai merah', '10 siung bawang merah', '5 siung bawang putih', '3 cm jahe', '3 cm lengkuas, memarkan', '2 batang serai, memarkan', '5 lembar daun jeruk', '2 lembar daun kunyit', 'Garam dan gula secukupnya'],
+      steps: ['Haluskan cabai, bawang merah, bawang putih, dan jahe.', 'Tumis bumbu halus bersama lengkuas, serai, daun jeruk, dan daun kunyit hingga harum.', 'Masukkan santan, aduk terus agar tidak pecah.', 'Masukkan daging, masak dengan api kecil sambil sesekali diaduk.', 'Masak hingga santan mengental dan berminyak, daging empuk dan bumbu meresap, sekitar 2.5-3 jam.', 'Angkat setelah rendang berwarna kehitaman dan kering.']
+    },
+    {
+      id: 'seed-2',
+      name: 'Soto Ayam Lamongan',
+      category: 'Sup & Soto',
+      origin: 'Jawa Timur',
+      time: '1 jam',
+      servings: '4 orang',
+      desc: 'Soto ayam segar dengan kuah kuning gurih dan taburan koya khas Lamongan.',
+      ingredients: ['1 ekor ayam kampung', '2 liter air', '6 siung bawang putih', '5 siung bawang merah', '3 cm kunyit', '2 cm jahe', '3 lembar daun salam', '2 batang serai', 'Soun, kol, dan telur rebus untuk pelengkap', 'Bawang goreng dan koya untuk taburan'],
+      steps: ['Rebus ayam hingga matang, angkat dan suwir dagingnya, saring kaldunya.', 'Haluskan bawang putih, bawang merah, kunyit, dan jahe.', 'Tumis bumbu halus bersama daun salam dan serai hingga harum.', 'Masukkan tumisan bumbu ke dalam kaldu, masak hingga mendidih.', 'Sajikan kuah dengan suwiran ayam, soun, kol, dan telur rebus.', 'Taburi bawang goreng dan koya sebelum disajikan.']
+    },
+    {
+      id: 'seed-3',
+      name: 'Nasi Goreng Kampung',
+      category: 'Nasi & Mi',
+      origin: 'Nasional',
+      time: '25 menit',
+      servings: '2 orang',
+      desc: 'Nasi goreng sederhana dengan rasa gurih pedas, cocok untuk sarapan atau makan malam cepat.',
+      ingredients: ['2 piring nasi putih dingin', '2 butir telur', '3 siung bawang putih, cincang', '5 buah cabai rawit, iris', '2 sdm kecap manis', 'Garam dan penyedap secukupnya', 'Bawang goreng untuk taburan'],
+      steps: ['Panaskan minyak, orak-arik telur hingga matang, sisihkan.', 'Tumis bawang putih dan cabai rawit hingga harum.', 'Masukkan nasi, aduk rata dengan bumbu.', 'Tambahkan kecap manis, garam, dan penyedap, aduk hingga merata.', 'Campurkan telur orak-arik, aduk sebentar.', 'Sajikan dengan taburan bawang goreng.']
+    }
+  ];
+
+  function storageAvailable() {
+    try {
+      const testKey = '__storage_test__';
+      localStorage.setItem(testKey, '1');
+      localStorage.removeItem(testKey);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  const hasStorage = storageAvailable();
+
+  function loadRecipes() {
+    if (!hasStorage) return [...seed];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+        return [...seed];
+      }
+      return JSON.parse(raw);
+    } catch {
+      return [...seed];
+    }
+  }
+
+  function saveRecipes(recipes) {
+    if (!hasStorage) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
+    } catch {
+      /* storage unavailable, changes stay in-memory only */
+    }
+  }
+
+  let recipes = loadRecipes();
+
+  const grid = document.getElementById('grid');
+  const emptyState = document.getElementById('emptyState');
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const categoryList = document.getElementById('categoryList');
+
+  const viewOverlay = document.getElementById('viewOverlay');
+  const viewModal = document.getElementById('viewModal');
+
+  const formOverlay = document.getElementById('formOverlay');
+  const recipeForm = document.getElementById('recipeForm');
+  const formTitle = document.getElementById('formTitle');
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderCategories() {
+    const cats = [...new Set(recipes.map(r => r.category).filter(Boolean))].sort();
+    categoryFilter.innerHTML = '<option value="">Semua Kategori</option>' +
+      cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    categoryList.innerHTML = cats.map(c => `<option value="${escapeHtml(c)}">`).join('');
+  }
+
+  function renderGrid() {
+    const q = searchInput.value.trim().toLowerCase();
+    const cat = categoryFilter.value;
+
+    const filtered = recipes.filter(r => {
+      const matchesCat = !cat || r.category === cat;
+      if (!matchesCat) return false;
+      if (!q) return true;
+      const hay = (r.name + ' ' + (r.ingredients || []).join(' ') + ' ' + (r.desc || '')).toLowerCase();
+      return hay.includes(q);
+    });
+
+    grid.innerHTML = filtered.map(r => `
+      <div class="recipe-card" data-id="${r.id}">
+        ${r.category ? `<span class="badge">${escapeHtml(r.category)}</span>` : ''}
+        <h3>${escapeHtml(r.name)}</h3>
+        <div class="meta">${[r.origin, r.time, r.servings].filter(Boolean).map(escapeHtml).join(' · ')}</div>
+        <div class="desc">${escapeHtml(r.desc || '')}</div>
+      </div>
+    `).join('');
+
+    emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
+
+    grid.querySelectorAll('.recipe-card').forEach(card => {
+      card.addEventListener('click', () => openView(card.dataset.id));
+    });
+  }
+
+  function openView(id) {
+    const r = recipes.find(x => x.id === id);
+    if (!r) return;
+    viewModal.innerHTML = `
+      <button class="close" id="viewClose">&times;</button>
+      <h2>${escapeHtml(r.name)}</h2>
+      <div class="meta-row">
+        ${r.category ? `<span>📂 ${escapeHtml(r.category)}</span>` : ''}
+        ${r.origin ? `<span>📍 ${escapeHtml(r.origin)}</span>` : ''}
+        ${r.time ? `<span>⏱ ${escapeHtml(r.time)}</span>` : ''}
+        ${r.servings ? `<span>🍽 ${escapeHtml(r.servings)}</span>` : ''}
+      </div>
+      ${r.desc ? `<p>${escapeHtml(r.desc)}</p>` : ''}
+      <section>
+        <h4>Bahan-bahan</h4>
+        <ul>${(r.ingredients || []).map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>
+      </section>
+      <section>
+        <h4>Langkah Memasak</h4>
+        <ol>${(r.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ol>
+      </section>
+      <div class="actions">
+        <button class="danger" id="deleteBtn">Hapus Resep</button>
+      </div>
+    `;
+    viewOverlay.classList.add('open');
+    document.getElementById('viewClose').addEventListener('click', closeView);
+    document.getElementById('deleteBtn').addEventListener('click', () => {
+      if (confirm(`Hapus resep "${r.name}"?`)) {
+        recipes = recipes.filter(x => x.id !== id);
+        saveRecipes(recipes);
+        renderCategories();
+        renderGrid();
+        closeView();
+      }
+    });
+  }
+
+  function closeView() {
+    viewOverlay.classList.remove('open');
+  }
+
+  function openForm() {
+    recipeForm.reset();
+    formTitle.textContent = 'Tambah Resep';
+    formOverlay.classList.add('open');
+  }
+
+  function closeForm() {
+    formOverlay.classList.remove('open');
+  }
+
+  document.getElementById('addBtn').addEventListener('click', openForm);
+  document.getElementById('formClose').addEventListener('click', closeForm);
+  document.getElementById('cancelBtn').addEventListener('click', closeForm);
+  viewOverlay.addEventListener('click', (e) => { if (e.target === viewOverlay) closeView(); });
+  formOverlay.addEventListener('click', (e) => { if (e.target === formOverlay) closeForm(); });
+
+  recipeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const newRecipe = {
+      id: 'r-' + Date.now(),
+      name: document.getElementById('f_name').value.trim(),
+      category: document.getElementById('f_category').value.trim(),
+      origin: document.getElementById('f_origin').value.trim(),
+      time: document.getElementById('f_time').value.trim(),
+      servings: document.getElementById('f_servings').value.trim(),
+      desc: document.getElementById('f_desc').value.trim(),
+      ingredients: document.getElementById('f_ingredients').value.split('\n').map(s => s.trim()).filter(Boolean),
+      steps: document.getElementById('f_steps').value.split('\n').map(s => s.trim()).filter(Boolean)
+    };
+    recipes.unshift(newRecipe);
+    saveRecipes(recipes);
+    renderCategories();
+    renderGrid();
+    closeForm();
+  });
+
+  searchInput.addEventListener('input', renderGrid);
+  categoryFilter.addEventListener('change', renderGrid);
+
+  renderCategories();
+  renderGrid();
+</script>
+
+</body>
+</html>
