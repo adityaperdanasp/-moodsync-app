@@ -583,6 +583,11 @@
   import {
     getFirestore, doc, getDoc, setDoc, onSnapshot
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getMessaging, getToken, onMessage, isSupported
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+  const VAPID_KEY = "BInAhQBMr2o9v13_bKyYBdOCCwB22ZM326Vpyfda5V5KEAkH7xiXSTetf-aWm6lHYTD53tqzy_i_FddM6yzr7TA";
 
   // ============================================================
   // ISI DENGAN CONFIG DARI FIREBASE CONSOLE KAMU
@@ -614,13 +619,60 @@
     syncBanner.textContent = text;
   }
 
+  let messaging = null;
+  let fcmApp = null;
+
   try {
-    const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
+    fcmApp = initializeApp(firebaseConfig);
+    db = getFirestore(fcmApp);
     isFirebaseReady = true;
   } catch (err) {
     console.error('Firebase init error', err);
     setSyncStatus('error', 'Gagal konek ke server, cek firebaseConfig');
+  }
+
+  async function setupNotifications() {
+    try {
+      const supported = await isSupported();
+      if (!supported || !('serviceWorker' in navigator)) return;
+
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      messaging = getMessaging(fcmApp);
+
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return;
+
+      const token = await getToken(messaging, {
+        vapidKey: VAPID_KEY,
+        serviceWorkerRegistration: registration
+      });
+
+      if (token && session) {
+        const field = session.role === 'istri' ? 'wifeToken' : 'husbandToken';
+        await saveData({ ...data, settings: { ...(data.settings || {}), [field]: token } });
+      }
+
+      onMessage(messaging, (payload) => {
+        const title = payload.notification?.title || 'MoodSync';
+        const body = payload.notification?.body || '';
+        new Notification(title, { body });
+      });
+    } catch (err) {
+      console.error('Setup notifikasi gagal', err);
+    }
+  }
+
+  async function sendPushNotification(targetToken, title, body) {
+    if (!targetToken) return;
+    try {
+      await fetch('/api/send-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: targetToken, title, body })
+      });
+    } catch (err) {
+      console.error('Gagal kirim notifikasi', err);
+    }
   }
 
   function loadSession() {
@@ -828,6 +880,15 @@
     };
     const next = { ...data, current: entry, history: [...data.history, entry] };
     await saveData(next);
+
+    const m = moods.find(x => x.id === entry.moodId);
+    const husbandToken = data.settings && data.settings.husbandToken;
+    sendPushNotification(
+      husbandToken,
+      `${m ? m.emoji : '💞'} Istrimu lagi ${m ? m.label.toLowerCase() : 'update mood'}`,
+      entry.note || 'Buka MoodSync buat lihat apa yang perlu kamu lakukan'
+    );
+
     noteInput.value = '';
     selectedMoodId = null;
     saveMoodBtn.textContent = 'Terkirim ✓';
@@ -894,6 +955,10 @@
   async function logReaction(type) {
     const newReactions = [...(data.reactions || []), { type, ts: Date.now() }];
     await saveData({ ...data, reactions: newReactions });
+
+    const wifeToken = data.settings && data.settings.wifeToken;
+    const rt = reactionTypes[type];
+    sendPushNotification(wifeToken, `${rt ? rt.emoji : '💌'} Notifikasi dari suami`, rt ? rt.text : 'Suami baru saja mengirim sesuatu untukmu!');
   }
 
   document.querySelectorAll('.reaction-btn').forEach(btn => {
@@ -1097,6 +1162,7 @@
     showViewForRole(role);
     renderAll();
     startSync();
+    setupNotifications();
   }
 
   // ============================================================
