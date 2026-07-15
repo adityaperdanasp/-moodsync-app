@@ -485,12 +485,19 @@
   .couple-photo {
     width: 100%;
     max-width: 260px;
+    aspect-ratio: 3 / 4;
     margin: 0 auto 18px;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(129,140,248,0.25);
   }
-  .couple-photo img { width: 100%; display: block; }
+  .couple-photo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
 
   .onboard-choice {
     display: flex;
