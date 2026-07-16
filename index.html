@@ -392,16 +392,32 @@
     margin-bottom: 4px;
   }
   .field-row input {
+    -webkit-appearance: none;
+    appearance: none;
     display: block;
     width: 100%;
-    height: 42px;
-    padding: 9px 12px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 12px;
     border-radius: 10px;
     border: 1px solid var(--border);
     font-size: 14px;
     font-family: inherit;
     color: var(--text);
     background: #fff;
+    box-sizing: border-box;
+  }
+  /* iOS Safari: bikin input tanggal tingginya seragam & teks rata kiri */
+  .field-row input[type="date"] {
+    text-align: left;
+  }
+  .field-row input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+  }
+  .field-row input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    margin-left: 4px;
   }
   .reminder-note {
     display: flex;
