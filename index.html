@@ -378,37 +378,53 @@
   .modal-sheet .sub { margin-bottom: 20px; }
   .modal-sheet .whatsapp-btn + .whatsapp-btn { margin-top: 12px; }
 
-  .florist-card {
+  .florist-block {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .florist-block:first-of-type { margin-top: 0; }
+  .florist-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f5f4fc;
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
-  .florist-card:first-of-type { margin-top: 0; }
-  .florist-avatar {
-    width: 42px;
-    height: 42px;
+  .florist-avatar-wrap {
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 16px;
     flex-shrink: 0;
+  }
+  .florist-avatar-wrap span {
+    font-weight: 800;
+    font-size: 8px;
+    line-height: 1.25;
+    text-align: center;
+    letter-spacing: 0.2px;
   }
   .florist-info { flex: 1; min-width: 0; }
   .florist-name { font-weight: 700; font-size: 14px; color: var(--text); }
   .florist-tag { font-size: 11px; color: #16a34a; margin-top: 2px; }
+  .florist-block .whatsapp-btn { margin: 0; }
   .trust-badge {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
     font-size: 11px;
     color: var(--muted);
+    background: #f5f4fc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
     margin-top: 16px;
   }
+  .trust-badge b { color: var(--text); font-size: 12px; }
 
   .profil-section {
     font-size: 12px;
@@ -1024,25 +1040,33 @@
     <h2>💐 Pesan Bunga</h2>
     <div class="sub">Pilih toko bunga, langsung chat WhatsApp buat pesenin istri</div>
 
-    <div class="florist-card">
-      <div class="florist-avatar" style="background:#fbcfe8; color:#9d174d;">M</div>
-      <div class="florist-info">
-        <div class="florist-name">Manis'e Florist</div>
-        <div class="florist-tag">✓ Chat langsung ke toko</div>
+    <div class="florist-block">
+      <div class="florist-row">
+        <div class="florist-avatar-wrap" style="background:#fbcfe8;">
+          <span style="color:#9d174d;">MANIS'E<br>FLORIST</span>
+        </div>
+        <div class="florist-info">
+          <div class="florist-name">Manis'e Florist</div>
+          <div class="florist-tag">✓ Chat langsung ke toko</div>
+        </div>
       </div>
+      <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287881522000?text=Halo%20Manis'e%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">📱 Chat via WhatsApp</a>
     </div>
-    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287881522000?text=Halo%20Manis'e%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat via WhatsApp</a>
 
-    <div class="florist-card">
-      <div class="florist-avatar" style="background:#bbf7d0; color:#166534;">C</div>
-      <div class="florist-info">
-        <div class="florist-name">Cille Tale Florist</div>
-        <div class="florist-tag">✓ Chat langsung ke toko</div>
+    <div class="florist-block">
+      <div class="florist-row">
+        <div class="florist-avatar-wrap" style="background:#bbf7d0;">
+          <span style="color:#166534;">CILLE TALE<br>FLORIST</span>
+        </div>
+        <div class="florist-info">
+          <div class="florist-name">Cille Tale Florist</div>
+          <div class="florist-tag">✓ Chat langsung ke toko</div>
+        </div>
       </div>
+      <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287887996802?text=Halo%20Cille%20Tale%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">📱 Chat via WhatsApp</a>
     </div>
-    <a class="whatsapp-btn flower-wa-link" href="https://wa.me/6287887996802?text=Halo%20Cille%20Tale%20Florist%2C%20saya%20mau%20pesan%20bunga%20untuk%20dikirim%20ke%20istri%20saya%20yang%20cantik" target="_blank" rel="noopener">Chat via WhatsApp</a>
 
-    <div class="trust-badge">🛡️ Kamu akan diarahkan langsung ke WhatsApp resmi toko</div>
+    <div class="trust-badge">🛡️ <div><b>Aman & Terpercaya</b><br>Chat langsung via WhatsApp resmi toko</div></div>
   </div>
 </div>
 
