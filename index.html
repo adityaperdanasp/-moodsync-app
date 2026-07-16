@@ -165,22 +165,43 @@
     z-index: 1;
   }
   .mood-hero-label {
+    font-size: 19px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+  }
+  .mood-hero-sub {
     font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     opacity: 0.85;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
   }
   .mood-hero-deco {
     position: absolute;
-    top: -10px;
-    right: -6px;
-    font-size: 90px;
-    opacity: 0.25;
-    transform: rotate(15deg);
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.15));
   }
-  .mood-hero-card .empty { color: rgba(255,255,255,0.85); }
+  .mood-hero-card .empty {
+    text-align: left;
+    padding: 0;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+  }
+  .mood-hero-card .empty .empty-sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.85;
+  }
 
   .streak-row { display: flex; align-items: center; gap: 12px; }
   .streak-emoji {
@@ -914,8 +935,9 @@
   <!-- HUSBAND VIEW -->
   <div class="view" id="husbandView">
     <div class="mood-hero-card" id="statusCard">
-      <div class="mood-hero-deco">💗</div>
+      <img class="mood-hero-deco" src="assets/icon-heart.png" alt="">
       <div class="mood-hero-label">Mood Istrimu</div>
+      <div class="mood-hero-sub">Update terakhir</div>
       <div class="status-banner" id="statusBanner"></div>
       <div id="noteDisplay"></div>
     </div>
@@ -1604,7 +1626,7 @@
 
   function renderHusbandView() {
     if (!data.current) {
-      statusBanner.innerHTML = '<div class="empty">Istrimu belum mengisi mood hari ini</div>';
+      statusBanner.innerHTML = '<div class="empty">Belum ada update hari ini<span class="empty-sub">Yuk isi mood istri sekarang</span></div>';
       noteDisplay.innerHTML = '';
       suggestionList.innerHTML = '<div class="empty">Belum ada saran, tunggu istrimu isi mood dulu</div>';
       return;
