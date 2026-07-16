@@ -1605,7 +1605,7 @@
     if (!data.current) {
       statusBanner.innerHTML = '<div class="empty">Istrimu belum mengisi mood hari ini</div>';
       noteDisplay.innerHTML = '';
-      suggestionList.innerHTML = '<div class="empty">Belum ada saran, tunggu istrimu isi mood dulu ya</div>';
+      suggestionList.innerHTML = '<div class="empty">Belum ada saran, tunggu istrimu isi mood dulu</div>';
       return;
     }
     const m = moods.find(x => x.id === data.current.moodId);
