@@ -62,8 +62,12 @@
     <!-- Step 2a: tampilkan kode yang dibuat -->
     <div id="stepShowCode" style="display:none;">
       <h2>Kode Pasangan Kamu</h2>
-      <div class="sub">Kirim kode ini ke pasanganmu, dia perlu masukkan kode ini di app-nya</div>
+      <div class="sub">Kirim kode ini ke pasanganmu, atau suruh dia scan QR-nya</div>
       <div class="code-display" id="generatedCode"></div>
+      <div class="qr-wrap">
+        <div id="qrCodeCanvas"></div>
+        <div class="qr-hint">Scan QR ini buat langsung join, nggak perlu ketik kode</div>
+      </div>
       <button class="primary" id="shareCodeBtn">Kirim via WhatsApp</button>
       <button class="secondary" id="continueAfterCreateBtn" style="margin-top:10px;">Lanjut ke App</button>
       <button class="link" id="backToPairBtn">← Kembali</button>
@@ -337,6 +341,7 @@
 </div>
 </div> <!-- /appRoot -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module" src="script.js"></script>
 
 </body>

@@ -825,6 +825,13 @@
 
   let pendingRole = null;
 
+  // Kalau dibuka dari scan QR (?code=XXXX), lewati step pilih buat-atau-gabung,
+  // langsung siapkan kode-nya di step join.
+  const urlPrefillCode = new URLSearchParams(location.search).get('code');
+  if (urlPrefillCode) {
+    history.replaceState(null, '', location.pathname);
+  }
+
   function showStep(step) {
     [stepRole, stepPair, stepShowCode, stepJoinCode].forEach(s => s.style.display = 'none');
     step.style.display = 'block';
@@ -841,6 +848,11 @@
   document.getElementById('roleNextBtn').addEventListener('click', () => {
     if (!pendingRole) {
       alert('Pilih peran kamu dulu ya');
+      return;
+    }
+    if (urlPrefillCode) {
+      document.getElementById('joinCodeInput').value = urlPrefillCode.toUpperCase();
+      showStep(stepJoinCode);
       return;
     }
     showStep(stepPair);
@@ -861,12 +873,36 @@
     document.getElementById('generatedCode').textContent = createdCode;
     try {
       await setDoc(doc(db, COUPLES_COLLECTION, createdCode), defaultData);
+      renderQrCode(createdCode);
       showStep(stepShowCode);
     } catch (err) {
       console.error(err);
       alert('Gagal membuat kode pasangan, coba lagi');
     }
   });
+
+  function renderQrCode(code) {
+    const container = document.getElementById('qrCodeCanvas');
+    container.innerHTML = '';
+    if (typeof QRCode === 'undefined') {
+      container.textContent = 'QR tidak tersedia, pakai kode di atas ya';
+      return;
+    }
+    const joinUrl = `${location.origin}${location.pathname}?code=${code}`;
+    try {
+      new QRCode(container, {
+        text: joinUrl,
+        width: 176,
+        height: 176,
+        colorDark: '#4c4869',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch (err) {
+      console.error('Gagal bikin QR', err);
+      container.textContent = 'QR tidak tersedia, pakai kode di atas ya';
+    }
+  }
 
   document.getElementById('shareCodeBtn').addEventListener('click', () => {
     const text = `Yuk connect di MoodSync! Masukkan kode pasangan ini: ${createdCode}`;

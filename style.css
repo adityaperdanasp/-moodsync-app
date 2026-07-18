@@ -699,6 +699,24 @@
     padding: 16px;
     margin: 16px 0;
   }
+  .qr-wrap {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  #qrCodeCanvas {
+    display: inline-block;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    line-height: 0;
+  }
+  #qrCodeCanvas canvas { border-radius: 6px; }
+  .qr-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
   input.code-input {
     width: 100%;
     padding: 12px;
